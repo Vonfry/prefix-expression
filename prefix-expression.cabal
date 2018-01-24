@@ -7,7 +7,7 @@ license:             GPL-3
 license-file:        LICENSE
 author:              Vonfry
 maintainer:          vonfry314@gmail.com
-copyright:           Copyright: ©  2017 Vonfry
+copyright:           Copyright: ©  2018 Vonfry
 category:            Text
 build-type:          Simple
 cabal-version:       >=1.10
