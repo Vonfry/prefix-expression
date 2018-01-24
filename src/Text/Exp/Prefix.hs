@@ -1,4 +1,4 @@
--- | Convert infix exp to prefix exp. The expression's operators contains: @ + - * / \ ** || && ! =~ ( ) @
+-- | Convert infix exp to prefix exp. The expression's operators contains: @ + - * / \ ^ || && ! =~ ( ) @
 module Text.Exp.Prefix (
     fromInfix
   ) where
@@ -9,7 +9,7 @@ import Text.Regex.PCRE ((=~))
 
 -- ^ a operators list which cantains a list in order with precedence.
 expOperators :: [[(String, Int)]]
-expOperators   = [[("**", 2)], [("*", 2), ("/", 2), ("\\", 2)], [("+", 2), ("-", 2)], [("=~", 2)], [("&&", 2)], [("||", 2)], [("!", 1)], [("(", 0), (")", 0)]]
+expOperators   = [[("^", 2)], [("*", 2), ("/", 2), ("\\", 2)], [("+", 2), ("-", 2)], [("=~", 2)], [("&&", 2)], [("||", 2)], [("!", 1)], [("(", 0), (")", 0)]]
 expOperators'  = foldr (++) [] expOperators
 expOperators'' = unzip expOperators'
 
@@ -60,7 +60,7 @@ fromInfix infixExp =
             = (opStack'', popedStack)
 
 checkInfixExp :: String -> Bool
-checkInfixExp exp = exp =~ "((&&|\\*\\*|\\|\\||=~|\\(|\\)|\\+|-|\\*|/|\\\\) *(&&|\\*\\*|\\|\\||=~|\\(|\\)|\\+|-|\\*|/|\\\\))|([0-z]+ +[0-z]+)"
+checkInfixExp exp = not $ exp =~ "((&&|\\|\\||\\^|=~|\\+|-|\\*|/|\\\\) *(&&|\\|\\||\\^|=~|\\+|-|\\*|/|\\\\))|([0-9A-Za-z]+ +[0-9A-Za-z]+)"
 
 checkOpArgs :: [String] -> Bool
 checkOpArgs stack = checkOpArgs' stack "" 0 0 0 == length stack
@@ -113,12 +113,12 @@ splitExp = splitExp' []
     splitExp' sp exp
       | "" <- exp = filter (\x -> x /= "") sp
       | otherwise
-      = let match = exp =~ " +|\\( *[\\+-][0-z]+ *\\)|&&|\\*\\*|\\|\\||=~|!|\\(|\\)|\\+|-|\\*|/|\\\\" :: String
+      = let match = exp =~ " +|\\( *[\\+-][0-9A-Za-z]+ *\\)|&&|\\^|\\|\\||=~|!|\\(|\\)|\\+|-|\\*|/|\\\\" :: String
         in if match /= ""
            then let Just (idx, _) = elemSubIndex match exp
                     (arg, exp')   = splitAt idx exp
                     (op, exp'')   = splitAt (length match) exp'
-                    op' = if op =~ "\\( *[\\+-][0-z]+ *\\)" :: Bool
+                    op' = if op =~ "\\( *[\\+-][0-9A-Za-z]+ *\\)" :: Bool
                              then filter (not.(`elem`"()")) op
                              else op
                  in splitExp' (sp ++ [filter (not.isSpace) arg, filter (not.isSpace) op']) exp''
@@ -126,7 +126,7 @@ splitExp = splitExp' []
 
 doPrefixNegative :: String -> String
 doPrefixNegative exp =
-    let match = exp =~ "^ *[\\+-][0-z]+" :: String
+    let match = exp =~ "^ *[\\+-][0-9A-Za-z]+" :: String
     in if match /= ""
         then let Just (t, d) = elemSubIndex match exp
             in take t exp ++ "(" ++ match ++ ")" ++ drop d exp
