@@ -1,5 +1,5 @@
 name:                prefix-expression
-version:             1.0.0
+version:             1.0.1
 -- synopsis:
 description:         convert infix to prefix expression
 homepage:            https://github.com/VonFry/prefix-expression
