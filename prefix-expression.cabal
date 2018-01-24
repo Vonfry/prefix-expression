@@ -1,7 +1,7 @@
 name:                prefix-expression
 version:             1.0.0
 -- synopsis:
--- description:
+description:         convert infix to prefix expression
 homepage:            https://github.com/VonFry/ParseExpression#readme
 license:             GPL3
 license-file:        LICENSE
