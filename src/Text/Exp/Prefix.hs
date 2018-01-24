@@ -7,13 +7,13 @@ import Data.List (intercalate, elemIndex, drop)
 import Data.Char (isSpace)
 import Text.Regex.PCRE ((=~))
 
--- ^ a operators list which cantains a list in order with precedence.
+-- | a operators list which cantains a list in order with precedence.
 expOperators :: [[(String, Int)]]
 expOperators   = [[("^", 2)], [("*", 2), ("/", 2), ("\\", 2)], [("+", 2), ("-", 2)], [("=~", 2)], [("&&", 2)], [("||", 2)], [("!", 1)], [("(", 0), (")", 0)]]
 expOperators'  = foldr (++) [] expOperators
 expOperators'' = unzip expOperators'
 
--- ^ parse a infix expression to prefix expression in a stack.
+-- | parse a infix expression to prefix expression in a stack.
 fromInfix :: String -> Either String String
 fromInfix infixExp =
     if checkInfixExp infixExp'
@@ -66,11 +66,11 @@ checkOpArgs :: [String] -> Bool
 checkOpArgs stack = checkOpArgs' stack "" 0 0 0 == length stack
   where
     checkOpArgs' :: [String] -- ^ prefix stack, without current op
-                    -> String   -- ^ current op
-                    -> Int      -- ^ current count
-                    -> Int      -- ^ needed count
-                    -> Int      -- ^ length of current exp
-                    -> Int      -- ^ current exp length in stack
+                 -> String   -- ^ current op
+                 -> Int      -- ^ current count
+                 -> Int      -- ^ needed count
+                 -> Int      -- ^ length of current exp
+                 -> Int      -- ^ current exp length in stack
     checkOpArgs' stack' op count _count len
         | "" <- op
         , top : stack'' <- stack'
@@ -132,7 +132,7 @@ doPrefixNegative exp =
             in take t exp ++ "(" ++ match ++ ")" ++ drop d exp
         else exp
 
--- ^ get a sub string index
+-- | get a sub string index
 elemSubIndex :: String -- ^ sub string
              -> String -- ^ origin String
              -> Maybe (Int, Int) -- ^ (prefix index, postfix index)
