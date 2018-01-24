@@ -3,7 +3,7 @@ version:             1.0.0
 -- synopsis:
 description:         convert infix to prefix expression
 homepage:            https://github.com/VonFry/ParseExpression#readme
-license:             GPL3
+license:             GPL-3
 license-file:        LICENSE
 author:              Vonfry
 maintainer:          vonfry314@gmail.com
