@@ -113,7 +113,7 @@ splitExp = splitExp' []
     splitExp' sp exp
       | "" <- exp = filter (\x -> x /= "") sp
       | otherwise
-      = let match = exp =~ " +|\\( *[\\+-][0-9A-Za-z]+ *\\)|&&|\\^|\\|\\||=~|!|\\(|\\)|\\+|-|\\*|/|\\\\" :: String
+      = let match = exp =~ " +|'.*'|\".*\"|\\( *[\\+-][0-9A-Za-z]+ *\\)|&&|\\^|\\|\\||=~|!|\\(|\\)|\\+|-|\\*|/|\\\\" :: String
         in if match /= ""
            then let Just (idx, _) = elemSubIndex match exp
                     (arg, exp')   = splitAt idx exp
