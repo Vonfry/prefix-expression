@@ -17,6 +17,7 @@ spec = do
       fromInfix "a + b + c" `shouldBe` Right "+ + a b c"
       fromInfix "\"a\" + b + 'c'" `shouldBe` Right "+ + \"a\" b 'c'"
       fromInfix "a >= b" `shouldBe` Right ">= a b"
+      fromInfix "(a > 1)&&(b < 1)" `shouldBe` Right "&& > a 1 < b 1"
     it "failed" $ do
       (isLeft $ fromInfix "!((1 + 3) * 3 - 4 ^ 5") `shouldBe` True
       (isLeft $ fromInfix "1 + + 2") `shouldBe` True

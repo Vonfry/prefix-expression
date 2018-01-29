@@ -7,6 +7,8 @@ import Data.List (intercalate, elemIndex, drop)
 import Data.Char (isSpace)
 import Text.Regex.PCRE ((=~))
 
+import Debug.Trace (trace)
+
 -- | a operators list which cantains a list in order with precedence.
 expOperators :: [[(String, Int)]]
 expOperators   = [[("^", 2)], [("*", 2), ("/", 2), ("\\", 2), ("%", 2)], [("+", 2), ("-", 2)], [("=~", 2)], [("&&", 2)], [("||", 2)], [("!", 1)], [("<", 2), ("<=", 2), (">", 2), (">=", 2), ("==", 2)], [("(", 0), (")", 0)]]
@@ -82,13 +84,13 @@ checkOpArgs stack = checkOpArgs' stack "" 0 0 0 == length stack
           in if count' == 0
                 then checkOpArgs' stack'' op (count + 1) _count (len + 1)
                 else let subLen = checkOpArgs' stack'' top 0 count' 1
-                         stack''' = drop subLen stack''
+                         stack''' = drop (subLen - 1) stack''
                      in checkOpArgs' stack''' op (count + 1) _count (len + subLen)
         | count == _count
         = len
         | [] <- stack'
         , count /= _count
-        = len + 1
+        = 0
         | otherwise
         = len
 
@@ -113,7 +115,7 @@ splitExp = splitExp' []
     splitExp' sp exp
       | "" <- exp = filter (\x -> x /= "") sp
       | otherwise
-      = let match = exp =~ " +|'.*'|\".*\"|\\( *[\\+-][0-9A-Za-z]+ *\\)|&&|\\^|\\|\\||=~|!|[><=]=|\\(|\\)|\\+|-|\\*|/|%|\\\\" :: String
+      = let match = exp =~ " +|'.*'|\".*\"|\\( *[\\+-][0-9A-Za-z]+ *\\)|&&|\\^|\\|\\||=~|!|[><=]=|[><]|\\(|\\)|\\+|-|\\*|/|%|\\\\" :: String
         in if match /= ""
            then let Just (idx, _) = elemSubIndex match exp
                     (arg, exp')   = splitAt idx exp
