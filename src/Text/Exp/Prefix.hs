@@ -1,4 +1,4 @@
--- | Convert infix exp to prefix exp. The expression's operators contains: @ + - * / \ ^ || && ! =~ ( ) @
+-- | Convert infix exp to prefix exp. The expression's operators to see 'expOperators'
 module Text.Exp.Prefix (
     fromInfix
   ) where
@@ -11,7 +11,7 @@ import Debug.Trace (trace)
 
 -- | a operators list which cantains a list in order with precedence.
 expOperators :: [[(String, Int)]]
-expOperators   = [[("^", 2)], [("*", 2), ("/", 2), ("\\", 2), ("%", 2)], [("+", 2), ("-", 2)], [("=~", 2)], [("&&", 2)], [("||", 2)], [("!", 1)], [("<", 2), ("<=", 2), (">", 2), (">=", 2), ("==", 2)], [("(", 0), (")", 0)]]
+expOperators   = [[("^", 2)], [("*", 2), ("/", 2), ("\\", 2), ("%", 2)], [("+", 2), ("-", 2)], [("=~", 2)], [("&&", 2)], [("||", 2)], [("!", 1)], [("<", 2), ("<=", 2), (">", 2), (">=", 2), ("==", 2), ("/=", 2)], [("(", 0), (")", 0)]]
 expOperators'  = foldr (++) [] expOperators
 expOperators'' = unzip expOperators'
 
